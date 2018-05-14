@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ecommerce.model.ProductCategory;
 import com.ecommerce.service.ProductCategoryService;
@@ -69,7 +70,7 @@ public class ProductCategoryController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@GetMapping("product-category/{id}")
-	public ResponseEntity<Optional<ProductCategory>> findOne(@ApiParam(required = true) @PathVariable Integer id) {
+	public ResponseEntity<Optional<ProductCategory>> findOne(@ApiParam(required = true) @PathVariable UUID id) {
 
 		Optional<ProductCategory> productCategory = this.productCategoryService.findById(id);
 
@@ -88,7 +89,7 @@ public class ProductCategoryController {
 	@PutMapping("product-category/{id}")
 	public ResponseEntity<ProductCategory> update(
 		@RequestBody ProductCategory productCategoryUpdated, 
-		@ApiParam(required = true) @PathVariable Integer id
+		@ApiParam(required = true) @PathVariable UUID id
 	) {
 		
 		ProductCategory productCategory = this.productCategoryService.save(productCategoryUpdated);
@@ -106,7 +107,7 @@ public class ProductCategoryController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@DeleteMapping("product-category/{id}")
-	public void delete(@ApiParam(required = true) @PathVariable Integer id) {
+	public void delete(@ApiParam(required = true) @PathVariable UUID id) {
 		this.productCategoryService.delete(id);
 	}
 
