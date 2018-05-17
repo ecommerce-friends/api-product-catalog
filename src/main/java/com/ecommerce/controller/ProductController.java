@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,13 +27,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
+@RequestMapping(name = "product")
 @Api(tags = "Rest API for Product ", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
 	@Autowired
 	ProductService productService;
 
-	@PostMapping("product")
+	@PostMapping()
 	@ApiOperation(value = "Create a product")
 	@ApiResponses(value = {
 		@ApiResponse(code = 201, message = "Ok", response = Product.class),
@@ -57,7 +59,7 @@ public class ProductController {
 		@ApiResponse(code = 200, message = "Ok", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping("product")
+	@GetMapping()
 	public Iterable<Product> findAll() {
 		Iterable<Product> producsCategories = this.productService.findAll();
 		return producsCategories;
@@ -69,7 +71,7 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping("product/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Product>> findOne(@ApiParam(required = true) @PathVariable UUID id) {
 
 		Optional<Product> product = this.productService.findById(id);
@@ -86,7 +88,7 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@PutMapping("product/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Product> update(
 		@RequestBody Product productUpdated, 
 		@ApiParam(required = true) @PathVariable UUID id
@@ -106,7 +108,7 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@DeleteMapping("product/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@ApiParam(required = true) @PathVariable UUID id) {
 		this.productService.delete(id);
 	}

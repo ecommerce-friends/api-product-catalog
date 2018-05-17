@@ -15,26 +15,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "product_category")
-public class ProductCategory implements Serializable {
+@Table(name = "brand")
+public class Brand implements Serializable {
 
-	private static final long serialVersionUID = -7167699639727980976L;
+    private static final long serialVersionUID = -2909114562805831549L;
 
-	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO)
-	private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    
+    @Column(nullable = false, length = 100)
+    private String name;
 
-	@Column(length = 100, nullable = false,  unique = true)
-	private String name;
 
-	@Column(length = 500, nullable = true)
-	private String description;
-
-	@Column(nullable = false)
-	private boolean enabled;
 }
