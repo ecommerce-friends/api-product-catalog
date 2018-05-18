@@ -1,7 +1,6 @@
 package com.ecommerce.service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import com.ecommerce.model.ProductCategory;
 import com.ecommerce.repository.ProductCategoryRepository;
@@ -23,11 +22,11 @@ public class ProductCategoryService {
         return productCategoryRepository.findAll();
     }
 
-    public Optional<ProductCategory> findById(UUID id) {
+    public Optional<ProductCategory> findById(String id) {
         return productCategoryRepository.findById(id);
     }
 
-    public void delete(UUID id) {
+    public void delete(String id) {
         productCategoryRepository.deleteById(id);
     }
 }

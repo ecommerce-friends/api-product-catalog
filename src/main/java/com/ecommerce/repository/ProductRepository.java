@@ -1,9 +1,7 @@
 package com.ecommerce.repository;
 
-import java.util.UUID;
-
 import com.ecommerce.model.Product;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends CrudRepository<Product, UUID> {}
+public interface ProductRepository extends JpaRepository<Product, String> {}

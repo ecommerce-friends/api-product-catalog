@@ -2,12 +2,14 @@ package com.ecommerce.controller;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.UUID;
 
 import com.ecommerce.model.Product;
+import com.ecommerce.service.ProductCategoryService;
 import com.ecommerce.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,15 +35,26 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
+	
+	@Autowired
+	ProductCategoryService productCategoryService;
 
-	@PostMapping()
+	@PostMapping("product")
 	@ApiOperation(value = "Create a product")
 	@ApiResponses(value = {
 		@ApiResponse(code = 201, message = "Ok", response = Product.class),
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity<Product> create(@RequestBody Product newProduct) {
+	public ResponseEntity create(@RequestBody Product newProduct) {
+
+		productCategoryService.findById(newProduct.getProductCategory().getId())
+			.ifPresent(productCategory -> {
+				newProduct.setProductCategory(productCategory);
+			});
+
+		if (newProduct.getProductCategory().getName() == null) 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
 		Product product = this.productService.save(newProduct);
 
@@ -59,9 +72,9 @@ public class ProductController {
 		@ApiResponse(code = 200, message = "Ok", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping()
-	public Iterable<Product> findAll() {
-		Iterable<Product> producsCategories = this.productService.findAll();
+	@GetMapping("product")
+	public Iterable<Product> findAll(Pageable pageable) {
+		Iterable<Product> producsCategories = this.productService.findAll(pageable);
 		return producsCategories;
 	}
 
@@ -71,8 +84,8 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Product>> findOne(@ApiParam(required = true) @PathVariable UUID id) {
+	@GetMapping("{id}")
+	public ResponseEntity<Optional<Product>> findOne(@ApiParam(required = true) @PathVariable String id) {
 
 		Optional<Product> product = this.productService.findById(id);
 
@@ -88,10 +101,10 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@PutMapping("/{id}")
+	@PutMapping("product/{id}")
 	public ResponseEntity<Product> update(
 		@RequestBody Product productUpdated, 
-		@ApiParam(required = true) @PathVariable UUID id
+		@ApiParam(required = true) @PathVariable String id
 	) {
 		
 		Product product = this.productService.save(productUpdated);
@@ -108,8 +121,8 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@DeleteMapping("/{id}")
-	public void delete(@ApiParam(required = true) @PathVariable UUID id) {
+	@DeleteMapping("product/{id}")
+	public void delete(@ApiParam(required = true) @PathVariable String id) {
 		this.productService.delete(id);
 	}
 

@@ -2,7 +2,8 @@ package com.ecommerce.controller;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.UUID;
+
+import javax.validation.Valid;
 
 import com.ecommerce.model.ProductCategory;
 import com.ecommerce.service.ProductCategoryService;
@@ -39,7 +40,7 @@ public class ProductCategoryController {
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity<ProductCategory> create(@RequestBody ProductCategory newProductCategory) {
+	public ResponseEntity<ProductCategory> create(@Valid @RequestBody ProductCategory newProductCategory) {
 
 		ProductCategory productCategory = this.productCategoryService.save(newProductCategory);
 
@@ -70,7 +71,7 @@ public class ProductCategoryController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@GetMapping("product-category/{id}")
-	public ResponseEntity<Optional<ProductCategory>> findOne(@ApiParam(required = true) @PathVariable UUID id) {
+	public ResponseEntity<Optional<ProductCategory>> findOne(@ApiParam(required = true) @PathVariable String id) {
 
 		Optional<ProductCategory> productCategory = this.productCategoryService.findById(id);
 
@@ -89,7 +90,7 @@ public class ProductCategoryController {
 	@PutMapping("product-category/{id}")
 	public ResponseEntity<ProductCategory> update(
 		@RequestBody ProductCategory productCategoryUpdated, 
-		@ApiParam(required = true) @PathVariable UUID id
+		@ApiParam(required = true) @PathVariable String id
 	) {
 		
 		ProductCategory productCategory = this.productCategoryService.save(productCategoryUpdated);
@@ -107,7 +108,7 @@ public class ProductCategoryController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@DeleteMapping("product-category/{id}")
-	public void delete(@ApiParam(required = true) @PathVariable UUID id) {
+	public void delete(@ApiParam(required = true) @PathVariable String id) {
 		this.productCategoryService.delete(id);
 	}
 
