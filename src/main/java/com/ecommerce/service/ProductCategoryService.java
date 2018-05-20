@@ -22,11 +22,11 @@ public class ProductCategoryService {
         return productCategoryRepository.findAll();
     }
 
-    public Optional<ProductCategory> findById(Integer id) {
+    public Optional<ProductCategory> findById(String id) {
         return productCategoryRepository.findById(id);
     }
 
-    public void delete(Integer id) {
+    public void delete(String id) {
         productCategoryRepository.deleteById(id);
     }
 }

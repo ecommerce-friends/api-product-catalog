@@ -1,13 +1,13 @@
 package com.ecommerce.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,28 +16,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "product_category")
-public class ProductCategory implements Serializable {
+@Table(name = "brand")
+public class Brand implements Serializable {
 
-	private static final long serialVersionUID = -7167699639727980976L;
+    private static final long serialVersionUID = -2909114562805831549L;
 
-	@Id
+    @Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	private String id;
+    private UUID id;
+    
+    @Column(nullable = false, length = 100)
+    private String name;
 
-	@Column(length = 100, nullable = false,  unique = true)
-	@Size(min = 2, message = "Name should have at least 2 characters")
-	private String name;
 
-	@Column(length = 500, nullable = true)
-	private String description;
-
-	@Column(nullable = false)
-	private boolean enabled;
 }

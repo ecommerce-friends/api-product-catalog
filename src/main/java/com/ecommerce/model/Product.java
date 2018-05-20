@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -16,15 +18,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+@Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
-@Table(name = "product_category")
-public class ProductCategory implements Serializable {
+@Table(name = "product")
+public class Product implements Serializable {
 
-	private static final long serialVersionUID = -7167699639727980976L;
+	private static final long serialVersionUID = -40608366138121970L;
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
@@ -40,4 +43,13 @@ public class ProductCategory implements Serializable {
 
 	@Column(nullable = false)
 	private boolean enabled;
+
+	@ManyToOne
+	@JoinColumn(name = "product_category_id")
+	private ProductCategory productCategory;
+
+	/*@ManyToOne
+	@JoinColumn(name = "brand_id")
+	private Brand brand;*/
+    
 }
