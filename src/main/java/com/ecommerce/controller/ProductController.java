@@ -4,12 +4,12 @@ import java.net.URI;
 import java.util.Optional;
 
 import com.ecommerce.model.Product;
+import com.ecommerce.model.ProductCategory;
 import com.ecommerce.service.ProductCategoryService;
 import com.ecommerce.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,15 +46,12 @@ public class ProductController {
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity create(@RequestBody Product newProduct) {
+	public ResponseEntity<ProductCategory> create(@RequestBody Product newProduct) {
 
 		productCategoryService.findById(newProduct.getProductCategory().getId())
 			.ifPresent(productCategory -> {
 				newProduct.setProductCategory(productCategory);
 			});
-
-		if (newProduct.getProductCategory().getName() == null) 
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
 		Product product = this.productService.save(newProduct);
 
