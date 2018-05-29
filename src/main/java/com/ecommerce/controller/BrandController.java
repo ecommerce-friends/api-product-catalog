@@ -22,14 +22,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping(name = "brand")
 @Api(tags = "Rest API for Brands ", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BrandController {
 
 	@Autowired
 	BrandRepository brandRepository;
 
-	@PostMapping()
+	@PostMapping("brand")
 	@ApiOperation(value = "Create a brand")
 	@ApiResponses(value = {
 		@ApiResponse(code = 201, message = "Ok", response = Brand.class),
@@ -54,7 +53,7 @@ public class BrandController {
 		@ApiResponse(code = 200, message = "Ok", response = Brand.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping()
+	@GetMapping("brand")
 	public Iterable<Brand> findAll() {
 		Iterable<Brand> brands = this.brandRepository.findAll();
 		return brands;

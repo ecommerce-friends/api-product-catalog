@@ -88,10 +88,8 @@ public class ProductCategoryController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@PutMapping("product-category/{id}")
-	public ResponseEntity<ProductCategory> update(
-		@RequestBody ProductCategory productCategoryUpdated, 
-		@ApiParam(required = true) @PathVariable String id
-	) {
+	public ResponseEntity<ProductCategory> update(@RequestBody ProductCategory productCategoryUpdated, 
+		@ApiParam(required = true) @PathVariable String id) {
 		
 		ProductCategory productCategory = this.productCategoryService.save(productCategoryUpdated);
 

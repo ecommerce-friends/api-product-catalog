@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.ecommerce.model.Product;
 import com.ecommerce.repository.ProductRepository;
@@ -19,8 +20,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Iterable<Product> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Stream<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable).stream();
     }
 
     public Optional<Product> findById(String id) {
