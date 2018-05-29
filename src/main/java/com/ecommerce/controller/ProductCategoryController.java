@@ -5,12 +5,16 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductCategory;
+import com.ecommerce.model.converter.ProductCategoryConverter;
+import com.ecommerce.model.json.ProductCategoryJson;
 import com.ecommerce.service.ProductCategoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +44,16 @@ public class ProductCategoryController {
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity<ProductCategory> create(@Valid @RequestBody ProductCategory newProductCategory) {
+	public ResponseEntity<ProductCategory> create(@RequestBody ProductCategoryJson productCategoryJson) {
 
-		ProductCategory productCategory = this.productCategoryService.save(newProductCategory);
+		ProductCategory productCategory = ProductCategoryConverter.converterToProductCategory(productCategoryJson);
+
+		boolean existProductCategory = this.productCategoryService.verifyIfExistByName(productCategory.getName());
+
+		if (existProductCategory)
+			return ResponseEntity.badRequest().build();
+
+		productCategory = this.productCategoryService.save(productCategory);
 
 		if (productCategory == null)
 			return ResponseEntity.noContent().build();
@@ -50,7 +61,7 @@ public class ProductCategoryController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 			.buildAndExpand(productCategory.getId()).toUri();
 
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).body(productCategory);
 	}
 	
 	@ApiOperation(value = "Find all product categories")

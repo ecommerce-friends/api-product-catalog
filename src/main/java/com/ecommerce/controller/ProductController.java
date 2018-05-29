@@ -49,9 +49,7 @@ public class ProductController {
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-
 	public ResponseEntity<Product> create(@RequestBody Product newProduct) {
-
 
 		Optional<ProductCategory> productCategory = productCategoryService
 			.findById(newProduct.getProductCategory().getId());

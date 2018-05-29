@@ -40,6 +40,5 @@ public class ProductCategory implements Serializable {
 	@Column(length = 500, nullable = true)
 	private String description;
 
-	@Column(nullable = false)
 	private boolean enabled;
 }

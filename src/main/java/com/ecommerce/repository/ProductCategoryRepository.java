@@ -5,4 +5,11 @@ import com.ecommerce.model.ProductCategory;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface ProductCategoryRepository extends CrudRepository<ProductCategory, String> {}
+import java.util.List;
+import java.util.Optional;
+
+public interface ProductCategoryRepository extends CrudRepository<ProductCategory, String> {
+
+    List<ProductCategory> findByName(String name);
+
+}
