@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -32,6 +33,7 @@ public class ProductCategory implements Serializable {
 	private String id;
 
 	@Column(length = 100, nullable = false,  unique = true)
+	@NotBlank(message = "Name must not be blank")
 	@Size(min = 2, message = "Name should have at least 2 characters")
 	private String name;
 

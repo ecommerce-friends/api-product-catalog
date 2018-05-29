@@ -1,7 +1,11 @@
 package com.ecommerce.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductCategory;
@@ -29,7 +33,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping(name = "product")
 @Api(tags = "Rest API for Product ", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
@@ -46,12 +49,15 @@ public class ProductController {
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity<ProductCategory> create(@RequestBody Product newProduct) {
 
-		productCategoryService.findById(newProduct.getProductCategory().getId())
-			.ifPresent(productCategory -> {
-				newProduct.setProductCategory(productCategory);
-			});
+	public ResponseEntity<Product> create(@RequestBody Product newProduct) {
+
+
+		Optional<ProductCategory> productCategory = productCategoryService
+			.findById(newProduct.getProductCategory().getId());
+		
+		if (!productCategory.isPresent())
+			return ResponseEntity.notFound().build();
 
 		Product product = this.productService.save(newProduct);
 
@@ -70,9 +76,9 @@ public class ProductController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@GetMapping("product")
-	public Iterable<Product> findAll(Pageable pageable) {
-		Iterable<Product> producsCategories = this.productService.findAll(pageable);
-		return producsCategories;
+	public List<Product> findAll(Pageable pageable) {
+		Stream<Product> producsCategories = this.productService.findAll(pageable);
+		return producsCategories.collect(Collectors.toList());
 	}
 
 	@ApiOperation(value = "Find one product")
@@ -81,7 +87,7 @@ public class ProductController {
 		@ApiResponse(code = 404, message = "Not Found", response = Product.class),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@GetMapping("{id}")
+	@GetMapping("product/{id}")
 	public ResponseEntity<Optional<Product>> findOne(@ApiParam(required = true) @PathVariable String id) {
 
 		Optional<Product> product = this.productService.findById(id);
@@ -99,10 +105,7 @@ public class ProductController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@PutMapping("product/{id}")
-	public ResponseEntity<Product> update(
-		@RequestBody Product productUpdated, 
-		@ApiParam(required = true) @PathVariable String id
-	) {
+	public ResponseEntity<Product> update(@RequestBody Product productUpdated, @ApiParam(required = true) @PathVariable String id) {
 		
 		Product product = this.productService.save(productUpdated);
 
