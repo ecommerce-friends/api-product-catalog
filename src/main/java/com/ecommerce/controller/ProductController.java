@@ -57,6 +57,8 @@ public class ProductController {
 		if (!productCategory.isPresent())
 			return ResponseEntity.notFound().build();
 
+		newProduct.setProductCategory(productCategory.get());
+
 		Product product = this.productService.save(newProduct);
 
 		if (product == null)
@@ -65,7 +67,7 @@ public class ProductController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 			.buildAndExpand(product.getId()).toUri();
 
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).body(product);
 	}
 	
 	@ApiOperation(value = "Find all products")
@@ -74,9 +76,9 @@ public class ProductController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@GetMapping("product")
-	public List<Product> findAll(Pageable pageable) {
-		Stream<Product> producsCategories = this.productService.findAll(pageable);
-		return producsCategories.collect(Collectors.toList());
+	public List<Product> findAll() {
+		List<Product> producsCategories = this.productService.findAll();
+		return producsCategories;
 	}
 
 	@ApiOperation(value = "Find one product")
@@ -86,14 +88,14 @@ public class ProductController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@GetMapping("product/{id}")
-	public ResponseEntity<Optional<Product>> findOne(@ApiParam(required = true) @PathVariable String id) {
+	public ResponseEntity<Product> findOne(@ApiParam(required = true) @PathVariable String id) {
 
 		Optional<Product> product = this.productService.findById(id);
 
 		if (!product.isPresent())
 			return ResponseEntity.notFound().build();
 
-		return ResponseEntity.ok(product);
+		return ResponseEntity.ok(product.get());
 	}
 
 	@ApiOperation(value = "Update a product specific")
